@@ -2,9 +2,11 @@
   "name": "quiz",
   "version": "0.0.1",
   "dependencies": {
-    "socket.io": ">=0.9"
+    "socket.io": "0.9",
+    "express": "2.3.6",
+    "consolidate": "0.9.1"
   },
   "engines": {
-    "node": ">=0.8"
+    "node": "0.8"
   }
 }
