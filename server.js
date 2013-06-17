@@ -1,5 +1,7 @@
 var express = require('express');
 var engines = require('consolidate');
+var db = require('mongojs').connect('quiz', ['quiz']);
+var q = require('q');
 
 var app = express();
 
@@ -10,7 +12,8 @@ app.set('views', __dirname + '/views');
 app.use(express.static('public'));
 
 app.get('/', function(req, res) {
-    res.render('index', {title: 'test'});
+    
+    res.render('index');
 });
 
 app.listen(3000);
