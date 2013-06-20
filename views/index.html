@@ -10,7 +10,15 @@
         <script type="text/javascript" src="js/store-json2.min.js"></script>
         <script type="text/javascript" src="js/hogan-2.0.0.min.js"></script>
         <script type="text/javascript" src="js/jquery-2.0.2.min.js"></script>
-        <script type="text/javascript" src="js/quiz-templates.js"></script>
-        <script type="text/javascript" src="js/quiz.js"></script>
+
+        {{# host }}
+            <script type="text/javascript" src="js/quiz-templates-host.js"></script>
+            <script type="text/javascript" src="js/quiz-host.js"></script>
+        {{/ host }}
+
+        {{^ host}}
+            <script type="text/javascript" src="js/quiz-templates.js"></script>
+            <script type="text/javascript" src="js/quiz.js"></script>
+        {{/ host }}
     </body>
 </html>

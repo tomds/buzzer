@@ -20,6 +20,10 @@ app.get('/', function(req, res) {
     res.render('index');
 });
 
+app.get('/host', function (req, res) {
+    res.render('index', {host: true});
+});
+
 io.sockets.on('connection', function (socket) {
     clientConnection.init(socket);
 });
