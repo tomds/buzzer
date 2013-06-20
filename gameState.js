@@ -33,7 +33,7 @@ Quiz.prototype = {
     },
 
     modifyPlayer: function (uuid, details) {
-        
+        db.players.update({uuid: uuid}, {$set: {name: details.name, team: details.team}});
     }
 };
 
