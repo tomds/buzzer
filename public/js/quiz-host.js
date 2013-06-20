@@ -7,7 +7,7 @@ function showWelcomeMessage() {
 function updateTeamNumbers() {
     $('.team-list-full').each(function () {
         var $this = $(this);
-        var numPlayers = $this.find('li').length();
+        var numPlayers = $this.find('li').length;
         $this.find('.num-players').text(numPlayers);
     });
 }
@@ -22,6 +22,7 @@ function updateTeamLists(data) {
 function bindSockets() {
     socket.on('player details updated', function (data) {
         updateTeamLists(data);
+        updateTeamNumbers();
     });
 }
 
