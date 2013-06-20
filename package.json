@@ -9,6 +9,8 @@
     "consolidate": "0.9.1",
     "hogan.js": "2.0.0",
     "mongojs": "0.7.6",
+    "uuid-js": "0.7.4",
+    "underscore": "~1.4.4"
   },
   "engines": {
     "node": "0.8"

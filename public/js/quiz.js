@@ -1,53 +1,53 @@
 var socket = io.connect();
 
-function showUserDetailsForm(errors) {
-    $('#quiz-container').html(quizTemplates.userDetailsForm.render());
+function showPlayerDetailsForm(errors) {
+    $('#quiz-container').html(quizTemplates.playerDetailsForm.render());
 }
 
 function showWelcomeMessage() {
-    $('#quiz-container').html(quizTemplates.welcomeMessage.render(store.get('user')));
+    $('#quiz-container').html(quizTemplates.welcomeMessage.render(store.get('player')));
 }
 
-function validateUser(userDetails) {
-    socket.emit('user details', userDetails, function (data) {
+function validatePlayer(playerDetails) {
+    socket.emit('player details', playerDetails, function (data) {
         if (data.success) {
-            store.set('user', data.userDetails);
+            store.set('player', data.playerDetails);
             showWelcomeMessage();
         } else {
-            showUserDetailsForm(data.errors);
+            showPlayerDetailsForm(data.errors);
         }
     });
 }
 
-function getUserDetails() {
-    var userDetails = store.get('user');
-    if (userDetails) {
-        validateUser(userDetails);
+function getPlayerDetails() {
+    var playerDetails = store.get('player');
+    if (playerDetails) {
+        validatePlayer(playerDetails);
     } else {
-        showUserDetailsForm();
+        showPlayerDetailsForm();
     }
 }
 
-function onSubmitUserDetails(e) {
+function onSubmitPlayerDetails(e) {
     e.preventDefault();
     var $this = $(this);
 
-    var userDetails = {
+    var playerDetails = {
         name: $this.find('[name=name]').val(),
         team: $this.find('[name=team]:checked()').val()
     };
 
-    validateUser(userDetails);
+    validatePlayer(playerDetails);
 }
 
 function bindSockets() {
-    socket.on('request user details', function () {
-        getUserDetails();
+    socket.on('request player details', function () {
+        getPlayerDetails();
     });
 }
 
 function bindDom() {
-    $('#quiz-container').on('submit', '#user-details-form', onSubmitUserDetails);
+    $('#quiz-container').on('submit', '#player-details-form', onSubmitPlayerDetails);
 }
 
 function init() {

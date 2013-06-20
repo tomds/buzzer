@@ -1,6 +1,6 @@
 quizTemplates = {
-    userDetailsForm: Hogan.compile(
-        '<form id="user-details-form">' +
+    playerDetailsForm: Hogan.compile(
+        '<form id="player-details-form">' +
             '<input name="name" placeholder="Your name" /><br />' +
             '<input type="radio" name="team" value="red" id="radio-team-red" /><label for="radio-team-red">Red</label>' +
             '<input type="radio" name="team" value="blue" id="radio-team-blue" /><label for="radio-team-blue">Blue</label>' +

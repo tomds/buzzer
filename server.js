@@ -1,7 +1,6 @@
 var express = require('express');
 var engines = require('consolidate');
 var http = require('http');
-var db = require('mongojs').connect('quiz', ['quiz']);
 var io = require('socket.io');
 var clientConnection = require('./clientConnection');
 
