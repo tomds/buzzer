@@ -34,6 +34,12 @@ Quiz.prototype = {
 
     modifyPlayer: function (uuid, details) {
         db.players.update({uuid: uuid}, {$set: {name: details.name, team: details.team}});
+    },
+
+    getAllPlayers: function (callback) {
+        db.players.find({}, function (err, players) {
+            callback(players);
+        });
     }
 };
 

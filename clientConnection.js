@@ -32,6 +32,14 @@ function bindPlayerDetailsReceived (socket) {
     });
 }
 
+function bindHostRequestTeamList(socket) {
+    socket.on('host request team list', function (fn) {
+        quiz.getAllPlayers(function (players) {
+            fn({players: players});
+        });
+    });
+}
+
 function requestPlayerDetails(socket) {
     socket.emit('request player details');
 }
@@ -42,6 +50,7 @@ function sendInitialState(socket) {
 
 exports.init = function (socket) {
     bindPlayerDetailsReceived(socket);
+    bindHostRequestTeamList(socket);
 
     requestPlayerDetails(socket);
 };

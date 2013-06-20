@@ -19,7 +19,25 @@ function updateTeamLists(data) {
     $team.find('ul').prepend(quizTemplates.playerEntry.render(data));
 }
 
+function getFullTeamsUpdate() {
+    socket.emit('host request team list', function (data) {
+        $.each(data.players, function () {
+            updateTeamLists(this);
+        });
+
+        updateTeamNumbers();
+    });
+}
+
 function bindSockets() {
+    socket.on('request player details', function () {
+        // This signifies that the connection has been established. Pay no attention
+        // to the message name, it's completely unrelated to its purpose! Makes more
+        // sense if you're a normal player, honest ;)
+
+        getFullTeamsUpdate();
+    });
+
     socket.on('player details updated', function (data) {
         updateTeamLists(data);
         updateTeamNumbers();
