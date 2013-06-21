@@ -26,5 +26,9 @@ quizTemplates = {
 
     playerEntry: Hogan.compile(
         '<li data-uuid="{{ uuid }}">{{ name }}</li>'
+    ),
+
+    listenBuzzers: Hogan.compile(
+        '<p>Waiting for buzzer...</p>'
     )
 };

@@ -40,6 +40,12 @@ Quiz.prototype = {
         db.players.find({}, function (err, players) {
             callback(players);
         });
+    },
+
+    updateState: function (state, callback) {
+        db.state.update({}, {$set: {state: state}}, function (err, data) {
+            callback(null, data);
+        });
     }
 };
 

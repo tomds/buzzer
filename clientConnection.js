@@ -40,6 +40,15 @@ function bindHostRequestTeamList(socket) {
     });
 }
 
+function bindUpdateState(socket) {
+    socket.on('host update state', function (data) {
+        quiz.updateState(data.state, function () {
+            socket.emit('state updated', data);
+            socket.broadcast.emit('state updated', data);
+        });
+    });
+}
+
 function requestPlayerDetails(socket) {
     socket.emit('request player details');
 }
@@ -51,6 +60,7 @@ function sendInitialState(socket) {
 exports.init = function (socket) {
     bindPlayerDetailsReceived(socket);
     bindHostRequestTeamList(socket);
+    bindUpdateState(socket);
 
     requestPlayerDetails(socket);
 };

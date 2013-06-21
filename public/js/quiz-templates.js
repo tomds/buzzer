@@ -13,5 +13,9 @@ quizTemplates = {
     welcomeMessage: Hogan.compile(
         '<h1>Welcome, {{ name }}</h1>' +
         '<p>You are on the {{ team }} team.</p>'
-    )
+    ),
+
+    buzzerActive: Hogan.compile(
+        '<div id="buzzer-active"><div id="btn-buzzer" class="btn {{ buttonClass }}">BUZZ!</div></div>'
+    ),
 };

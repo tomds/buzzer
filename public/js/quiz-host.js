@@ -29,6 +29,22 @@ function getFullTeamsUpdate() {
     });
 }
 
+function listenBuzzers() {
+    if (!$('#game-in-progress').length) {
+        $('#quiz-container').html(quizTemplates.listenBuzzers.render());
+    }
+}
+
+function onStateUpdated(data) {
+    if (data.state === 'buzzersActive') {
+        listenBuzzers();
+    }
+}
+
+function activateBuzzers() {
+    socket.emit('host update state', {state: 'buzzersActive'});
+}
+
 function bindSockets() {
     socket.on('request player details', function () {
         // This signifies that the connection has been established. Pay no attention
@@ -42,10 +58,14 @@ function bindSockets() {
         updateTeamLists(data);
         updateTeamNumbers();
     });
+
+    socket.on('state updated', onStateUpdated);
 }
 
 function bindDom() {
-    // $('#quiz-container').on('submit', '#user-details-form', onSubmitUserDetails);
+    var $container = $('#quiz-container').hammer();
+
+    $container.on('tap', '#btn-start-game', activateBuzzers);
 }
 
 function init() {
