@@ -1,6 +1,6 @@
 quizTemplates = {
     lobby: Hogan.compile(
-        '<div id="btn-start-game"></span class="btn">Start game</span></div>' +
+        '<div id="btn-start-game" class="btn"></span class="btn">Start game</span></div>' +
         '<div id="teams">'+
             '<div class="team-list-full red">' +
                 '<h2>Red team: <span class="num-players">0</span> players</h2>' +
