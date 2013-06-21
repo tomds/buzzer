@@ -25,9 +25,13 @@ function bindPlayerDetailsReceived (socket) {
             _.extend(data, {uuid: uuid});
 
             socket.set('playerDetails', data);
-            
-            fn({success: true, playerDetails: data});
             socket.broadcast.emit('player details updated', data);
+
+            fn({success: true, playerDetails: data});
+
+            quiz.getState(function (err, state) {
+                socket.emit('state updated', {state: state});
+            });
         });
     });
 }
@@ -53,14 +57,19 @@ function requestPlayerDetails(socket) {
     socket.emit('request player details');
 }
 
-function sendInitialState(socket) {
-
+function bindRequestState(socket) {
+    socket.on('request state', function () {
+        quiz.getState(function (err, state) {
+            socket.emit('state updated', {state: state});
+        });
+    });
 }
 
 exports.init = function (socket) {
     bindPlayerDetailsReceived(socket);
     bindHostRequestTeamList(socket);
     bindUpdateState(socket);
+    bindRequestState(socket);
 
     requestPlayerDetails(socket);
 };

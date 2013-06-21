@@ -5,14 +5,16 @@ function showPlayerDetailsForm(errors) {
 }
 
 function showWelcomeMessage() {
-    $('#quiz-container').html(quizTemplates.welcomeMessage.render(store.get('player')));
+    if (!$('#welcome-message').length) {
+        $('#quiz-container').html(quizTemplates.welcomeMessage.render(store.get('player')));
+    }
 }
 
 function validatePlayer(playerDetails) {
     socket.emit('player details', playerDetails, function (data) {
         if (data.success) {
             store.set('player', data.playerDetails);
-            showWelcomeMessage();
+            $('#quiz-container').html('');
         } else {
             showPlayerDetailsForm(data.errors);
         }
@@ -71,8 +73,13 @@ function onSubmitPlayerDetails(e) {
 }
 
 function onStateUpdated(data) {
-    if (data.state === 'buzzersActive') {
-        buzzersActive();
+    switch (data.state) {
+        case 'buzzersActive':
+            buzzersActive();
+            break;
+        case 'starting':
+            showWelcomeMessage();
+            break;
     }
 }
 

@@ -46,6 +46,12 @@ Quiz.prototype = {
         db.state.update({}, {$set: {state: state}}, function (err, data) {
             callback(null, data);
         });
+    },
+
+    getState: function (callback) {
+        db.state.findOne({}, function (err, data) {
+            callback(null, data.state);
+        });
     }
 };
 

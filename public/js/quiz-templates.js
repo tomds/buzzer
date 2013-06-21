@@ -11,8 +11,10 @@ quizTemplates = {
     ),
 
     welcomeMessage: Hogan.compile(
-        '<h1>Welcome, {{ name }}</h1>' +
-        '<p>You are on the {{ team }} team.</p>'
+        '<div id="welcome-message">' +
+            '<h1>Welcome, {{ name }}</h1>' +
+            '<p>You are on the {{ team }} team.</p>' +
+        '</div>'
     ),
 
     buzzerActive: Hogan.compile(

@@ -1,7 +1,18 @@
 var socket = io.connect();
 
+function getFullTeamsUpdate() {
+    socket.emit('host request team list', function (data) {
+        $.each(data.players, function () {
+            updateTeamLists(this);
+        });
+
+        updateTeamNumbers();
+    });
+}
+
 function showWelcomeMessage() {
     $('#quiz-container').html(quizTemplates.lobby.render());
+    getFullTeamsUpdate();
 }
 
 function updateTeamNumbers() {
@@ -19,16 +30,6 @@ function updateTeamLists(data) {
     $team.find('ul').prepend(quizTemplates.playerEntry.render(data));
 }
 
-function getFullTeamsUpdate() {
-    socket.emit('host request team list', function (data) {
-        $.each(data.players, function () {
-            updateTeamLists(this);
-        });
-
-        updateTeamNumbers();
-    });
-}
-
 function listenBuzzers() {
     if (!$('#game-in-progress').length) {
         $('#quiz-container').html(quizTemplates.listenBuzzers.render());
@@ -36,13 +37,22 @@ function listenBuzzers() {
 }
 
 function onStateUpdated(data) {
-    if (data.state === 'buzzersActive') {
-        listenBuzzers();
+    switch (data.state) {
+        case 'buzzersActive':
+            listenBuzzers();
+            break;
+        case 'starting':
+            showWelcomeMessage();
+            break;
     }
 }
 
 function activateBuzzers() {
     socket.emit('host update state', {state: 'buzzersActive'});
+}
+
+function getState () {
+    socket.emit('request state');
 }
 
 function bindSockets() {
@@ -51,7 +61,7 @@ function bindSockets() {
         // to the message name, it's completely unrelated to its purpose! Makes more
         // sense if you're a normal player, honest ;)
 
-        getFullTeamsUpdate();
+        getState();
     });
 
     socket.on('player details updated', function (data) {
@@ -71,8 +81,6 @@ function bindDom() {
 function init() {
     bindDom();
     bindSockets();
-
-    showWelcomeMessage();
 }
 
 init();
