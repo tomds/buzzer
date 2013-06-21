@@ -20,4 +20,12 @@ quizTemplates = {
     buzzerActive: Hogan.compile(
         '<div id="buzzer-active"><div id="btn-buzzer" class="btn {{ buttonClass }}">BUZZ!</div></div>'
     ),
+
+    buzzSuccess: Hogan.compile(
+        '<p id="buzz-outcome">You buzzed first!</p>'
+    ),
+
+    buzzFail: Hogan.compile(
+        '<p id="buzz-outcome">Too slow...</p>'
+    )
 };

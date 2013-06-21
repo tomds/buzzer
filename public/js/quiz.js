@@ -1,4 +1,5 @@
 var socket = io.connect();
+var gameState = '';
 
 function showPlayerDetailsForm(errors) {
     $('#quiz-container').html(quizTemplates.playerDetailsForm.render());
@@ -51,13 +52,18 @@ function getButtonClass(team) {
     return newClass;
 }
 
-function buzzersActive() {
+function showGame() {
     // Don't show the button until this player is actually in the game.
     // If they are still entering details, don't do anything.
     if (!$('#player-details-form').length && !$('#buzzer-active').length) {
         var buttonClass = getButtonClass(store.get('player').team);
         $('#quiz-container').html(quizTemplates.buzzerActive.render({buttonClass: buttonClass}));
     }
+}
+
+function buzzersActive() {
+    showGame();
+    $('#buzz-outcome').remove();
 }
 
 function onSubmitPlayerDetails(e) {
@@ -73,13 +79,37 @@ function onSubmitPlayerDetails(e) {
 }
 
 function onStateUpdated(data) {
+    gameState = data.state;
+
     switch (data.state) {
         case 'buzzersActive':
             buzzersActive();
             break;
+        case 'buzzersInactive':
+            showGame();
+            break;
         case 'starting':
             showWelcomeMessage();
             break;
+    }
+}
+
+function onBuzz(e) {
+    if (gameState === 'buzzersActive') {
+        socket.emit('buzz', function (data) {
+            // See if server says that we buzzed first and render accordingly
+            if (!$('#buzz-outcome').length) {
+                if (data.success) {
+                    $('#btn-buzzer').after(quizTemplates.buzzSuccess.render());
+                } else {
+                    $('#btn-buzzer').after(quizTemplates.buzzFail.render());
+                }
+            }
+        });
+    } else if (gameState === 'buzzersInactive') {
+        if (!$('#buzz-outcome').length) {
+            $('#btn-buzzer').after(quizTemplates.buzzFail.render());
+        }
     }
 }
 
@@ -89,7 +119,9 @@ function bindSockets() {
 }
 
 function bindDom() {
-    $('#quiz-container').on('submit', '#player-details-form', onSubmitPlayerDetails);
+    var $container = $('#quiz-container').hammer();
+    $container.on('submit', '#player-details-form', onSubmitPlayerDetails);
+    $container.on('tap', '#btn-buzzer', onBuzz);
 }
 
 function init() {

@@ -5,12 +5,13 @@ function Quiz () {
 }
 
 Quiz.prototype = {
+    gameState: 'starting',
+
     startQuiz: function() {
         // Continue previous quiz, or start new one if none found
         db.state.findOne({}, function (err, state) {
             if (!state) {
                 var state = {
-                    state: 'starting',
                     pointsRed: 0,
                     pointsBlue: 0,
                     pointsGreen: 0,
@@ -42,16 +43,13 @@ Quiz.prototype = {
         });
     },
 
-    updateState: function (state, callback) {
-        db.state.update({}, {$set: {state: state}}, function (err, data) {
-            callback(null, data);
-        });
+    updateState: function (state) {
+        this.gameState = state;
+        return state;
     },
 
-    getState: function (callback) {
-        db.state.findOne({}, function (err, data) {
-            callback(null, data.state);
-        });
+    getState: function () {
+        return this.gameState;
     }
 };
 

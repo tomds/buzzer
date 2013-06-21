@@ -29,9 +29,7 @@ function bindPlayerDetailsReceived (socket) {
 
             fn({success: true, playerDetails: data});
 
-            quiz.getState(function (err, state) {
-                socket.emit('state updated', {state: state});
-            });
+            socket.emit('state updated', {state: quiz.getState()});
         });
     });
 }
@@ -46,10 +44,9 @@ function bindHostRequestTeamList(socket) {
 
 function bindUpdateState(socket) {
     socket.on('host update state', function (data) {
-        quiz.updateState(data.state, function () {
-            socket.emit('state updated', data);
-            socket.broadcast.emit('state updated', data);
-        });
+        quiz.updateState(data.state);
+        socket.emit('state updated', data);
+        socket.broadcast.emit('state updated', data);
     });
 }
 
@@ -59,9 +56,25 @@ function requestPlayerDetails(socket) {
 
 function bindRequestState(socket) {
     socket.on('request state', function () {
-        quiz.getState(function (err, state) {
-            socket.emit('state updated', {state: state});
-        });
+        socket.emit('state updated', {state: quiz.getState()});
+    });
+}
+
+function bindBuzz(socket) {
+    socket.on('buzz', function (fn) {
+        if (quiz.getState() === 'buzzersActive') {
+            quiz.updateState('buzzersInactive');
+            socket.broadcast.emit('state updated', {state: 'buzzersInactive'});
+            socket.emit('state updated', {state: 'buzzersInactive'});
+
+            socket.get('playerDetails', function (err, data) {
+                socket.broadcast.emit('player buzzed', data);
+            });
+
+            fn({success: true});
+        } else {
+            fn({success: false});
+        }
     });
 }
 
@@ -70,6 +83,7 @@ exports.init = function (socket) {
     bindHostRequestTeamList(socket);
     bindUpdateState(socket);
     bindRequestState(socket);
+    bindBuzz(socket);
 
     requestPlayerDetails(socket);
 };

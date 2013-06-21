@@ -29,6 +29,21 @@ quizTemplates = {
     ),
 
     listenBuzzers: Hogan.compile(
-        '<p>Waiting for buzzer...</p>'
+        '<p>Waiting for buzzer...</p>' +
+        '<div id="btn-reset-buzzers" class="btn">Reset</div>'
+    ),
+
+    playerBuzzed: Hogan.compile(
+        '<div id="player-buzzed">' +
+            '<p>BUZZ!</p>' +
+            '<p>Player: <strong>{{ name }}</strong></p>' +
+            '<p>Team: <strong>{{ team }}</strong></p>' +
+            '<div id="btn-reset-buzzers" class="btn">Reset</div>' +
+        '</div>'
+    ),
+
+    buzzersInactive: Hogan.compile(
+        '<p>Buzzers inactive</p>' +
+        '<div id="btn-reset-buzzers" class="btn">Reset</div>'
     )
 };

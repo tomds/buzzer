@@ -36,15 +36,28 @@ function listenBuzzers() {
     }
 }
 
+function buzzersInactive() {
+    if (!$('#player-buzzed').length) {
+        $('#quiz-container').html(quizTemplates.buzzersInactive.render());
+    }
+}
+
 function onStateUpdated(data) {
     switch (data.state) {
         case 'buzzersActive':
             listenBuzzers();
             break;
+        case 'buzzersInactive':
+            buzzersInactive();
+            break;
         case 'starting':
             showWelcomeMessage();
             break;
     }
+}
+
+function onPlayerBuzz(data) {
+    $('#quiz-container').html(quizTemplates.playerBuzzed.render(data));
 }
 
 function activateBuzzers() {
@@ -70,12 +83,14 @@ function bindSockets() {
     });
 
     socket.on('state updated', onStateUpdated);
+
+    socket.on('player buzzed', onPlayerBuzz);
 }
 
 function bindDom() {
     var $container = $('#quiz-container').hammer();
 
-    $container.on('tap', '#btn-start-game', activateBuzzers);
+    $container.on('tap', '#btn-start-game, #btn-reset-buzzers', activateBuzzers);
 }
 
 function init() {
