@@ -30,7 +30,8 @@ quizTemplates = {
 
     listenBuzzers: Hogan.compile(
         '<p>Waiting for buzzer...</p>' +
-        '<div id="btn-reset-buzzers" class="btn">Reset</div>'
+        '<div id="btn-reset-buzzers" class="btn">Reset</div>' +
+        '<div id="btn-init-sounds" class="btn">Init sounds</div>'
     ),
 
     playerBuzzed: Hogan.compile(
@@ -44,6 +45,7 @@ quizTemplates = {
 
     buzzersInactive: Hogan.compile(
         '<p>Buzzers inactive</p>' +
-        '<div id="btn-reset-buzzers" class="btn">Reset</div>'
+        '<div id="btn-reset-buzzers" class="btn">Reset</div>' +
+        '<div id="btn-init-sounds" class="btn">Init sounds</div>'
     )
 };

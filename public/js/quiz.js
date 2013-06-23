@@ -1,5 +1,6 @@
 var socket = io.connect();
 var gameState = '';
+var buzzerSound;
 
 function showPlayerDetailsForm(errors) {
     $('#quiz-container').html(quizTemplates.playerDetailsForm.render());
@@ -11,10 +12,18 @@ function showWelcomeMessage() {
     }
 }
 
+function setBuzzerSound(playerDetails) {
+    var team = playerDetails.team;
+    buzzerSound = new Howl({
+        urls: ['audio/buzzer_' + team + '.mp3']
+    });
+}
+
 function validatePlayer(playerDetails) {
     socket.emit('player details', playerDetails, function (data) {
         if (data.success) {
             store.set('player', data.playerDetails);
+            setBuzzerSound(data.playerDetails);
             $('#quiz-container').html('');
         } else {
             showPlayerDetailsForm(data.errors);
@@ -95,6 +104,8 @@ function onStateUpdated(data) {
 }
 
 function onBuzz(e) {
+    buzzerSound.stop().play();
+
     if (gameState === 'buzzersActive') {
         socket.emit('buzz', function (data) {
             // See if server says that we buzzed first and render accordingly

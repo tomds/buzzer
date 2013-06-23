@@ -1,4 +1,5 @@
 var socket = io.connect();
+var sounds = {};
 
 function getFullTeamsUpdate() {
     socket.emit('host request team list', function (data) {
@@ -56,7 +57,12 @@ function onStateUpdated(data) {
     }
 }
 
+function playSound(team) {
+    sounds[team].play();
+}
+
 function onPlayerBuzz(data) {
+    playSound(data.team);
     $('#quiz-container').html(quizTemplates.playerBuzzed.render(data));
 }
 
@@ -91,6 +97,21 @@ function bindDom() {
     var $container = $('#quiz-container').hammer();
 
     $container.on('tap', '#btn-start-game, #btn-reset-buzzers', activateBuzzers);
+    $container.on('tap', '#btn-init-sounds', initSounds);
+}
+
+function initSounds() {
+    sounds = {
+        red: new Howl({urls: ['audio/buzzer_red.mp3']}),
+        blue: new Howl({urls: ['audio/buzzer_blue.mp3']}),
+        green: new Howl({urls: ['audio/buzzer_green.mp3']}),
+        yellow: new Howl({urls: ['audio/buzzer_yellow.mp3']})
+    };
+
+    sounds.red.play();
+    sounds.blue.play();
+    sounds.green.play();
+    sounds.yellow.play();
 }
 
 function init() {
