@@ -1,6 +1,6 @@
  - DONE Buzzer audio
  - Edit scores
- - Display scores (host and players)
+ - DONE Display scores (host and players)
  - Players: edit name/team
  - Kick players with no active connection
  - Make prettier (and fit nicely on all devices)
