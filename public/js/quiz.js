@@ -103,6 +103,12 @@ function onStateUpdated(data) {
     }
 }
 
+function onScoresUpdated(data) {
+    for (team in data) {
+        $('.score.' + team + ' .value').text(data[team]);
+    }
+}
+
 function onBuzz(e) {
     buzzerSound.stop().play();
 
@@ -127,6 +133,7 @@ function onBuzz(e) {
 function bindSockets() {
     socket.on('request player details', getPlayerDetails);
     socket.on('state updated', onStateUpdated);
+    socket.on('scores updated', onScoresUpdated);
 }
 
 function bindDom() {

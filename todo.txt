@@ -1,4 +1,4 @@
- - Buzzer audio
+ - DONE Buzzer audio
  - Edit scores
  - Display scores (host and players)
  - Players: edit name/team

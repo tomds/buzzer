@@ -74,6 +74,30 @@ function getState () {
     socket.emit('request state');
 }
 
+function initSounds() {
+    sounds = {
+        red: new Howl({urls: ['audio/buzzer_red.mp3']}),
+        blue: new Howl({urls: ['audio/buzzer_blue.mp3']}),
+        green: new Howl({urls: ['audio/buzzer_green.mp3']}),
+        yellow: new Howl({urls: ['audio/buzzer_yellow.mp3']})
+    };
+
+    sounds.red.play();
+    sounds.blue.play();
+    sounds.green.play();
+    sounds.yellow.play();
+}
+
+function onScoresUpdated(data) {
+    for (team in data) {
+        $('.score.' + team + ' .value').text(data[team]);
+    }
+}
+
+function showHostControls() {
+    $('.score .value').after(quizTemplates.hostScoreEdit.render());
+}
+
 function bindSockets() {
     socket.on('request player details', function () {
         // This signifies that the connection has been established. Pay no attention
@@ -89,6 +113,7 @@ function bindSockets() {
     });
 
     socket.on('state updated', onStateUpdated);
+    socket.on('scores updated', onScoresUpdated);
 
     socket.on('player buzzed', onPlayerBuzz);
 }
@@ -100,23 +125,10 @@ function bindDom() {
     $container.on('tap', '#btn-init-sounds', initSounds);
 }
 
-function initSounds() {
-    sounds = {
-        red: new Howl({urls: ['audio/buzzer_red.mp3']}),
-        blue: new Howl({urls: ['audio/buzzer_blue.mp3']}),
-        green: new Howl({urls: ['audio/buzzer_green.mp3']}),
-        yellow: new Howl({urls: ['audio/buzzer_yellow.mp3']})
-    };
-
-    sounds.red.play();
-    sounds.blue.play();
-    sounds.green.play();
-    sounds.yellow.play();
-}
-
 function init() {
     bindDom();
     bindSockets();
+    showHostControls();
 }
 
 init();

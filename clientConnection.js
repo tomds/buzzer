@@ -54,6 +54,12 @@ function requestPlayerDetails(socket) {
     socket.emit('request player details');
 }
 
+function sendScores(socket) {
+    quiz.getScores(function (err, scores) {
+        socket.emit('scores updated', scores);
+    });
+}
+
 function bindRequestState(socket) {
     socket.on('request state', function () {
         socket.emit('state updated', {state: quiz.getState()});
@@ -86,4 +92,5 @@ exports.init = function (socket) {
     bindBuzz(socket);
 
     requestPlayerDetails(socket);
+    sendScores(socket);
 };

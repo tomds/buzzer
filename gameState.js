@@ -1,4 +1,4 @@
-var db = require('mongojs').connect('quiz', ['state', 'players']);
+var db = require('mongojs').connect('quiz', ['scores', 'players']);
 
 function Quiz () {
     this.startQuiz();
@@ -9,16 +9,16 @@ Quiz.prototype = {
 
     startQuiz: function() {
         // Continue previous quiz, or start new one if none found
-        db.state.findOne({}, function (err, state) {
-            if (!state) {
-                var state = {
-                    pointsRed: 0,
-                    pointsBlue: 0,
-                    pointsGreen: 0,
-                    pointsYellow: 0
+        db.scores.findOne({}, function (err, scores) {
+            if (!scores) {
+                var scores = {
+                    red: 0,
+                    blue: 0,
+                    green: 0,
+                    yellow: 0
                 };
 
-                db.state.insert(state);
+                db.scores.insert(scores);
             }
         });
     },
@@ -50,6 +50,12 @@ Quiz.prototype = {
 
     getState: function () {
         return this.gameState;
+    },
+
+    getScores: function (callback) {
+        db.scores.findOne({}, function (err, scores) {
+            callback(null, scores);
+        });
     }
 };
 

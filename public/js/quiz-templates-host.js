@@ -47,5 +47,12 @@ quizTemplates = {
         '<p>Buzzers inactive</p>' +
         '<div id="btn-reset-buzzers" class="btn">Reset</div>' +
         '<div id="btn-init-sounds" class="btn">Init sounds</div>'
+    ),
+
+    hostScoreEdit: Hogan.compile(
+        '<div class="host-score-edit">' +
+            '<span class="up">+</span>&nbsp;&nbsp;' +
+            '<span class="down">-</div>' +
+        '</div>'
     )
 };
