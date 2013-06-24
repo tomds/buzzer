@@ -3,7 +3,31 @@ var gameState = '';
 var buzzerSound;
 
 function showPlayerDetailsForm(errors) {
-    $('#quiz-container').html(quizTemplates.playerDetailsForm.render(errors));
+    $('#quiz-container').html('');
+
+    var $form = $('#player-details-form');
+    if (!errors.success) {
+        $form.find('.errors').html(quizTemplates.validationErrors.render(errors.errors));
+    }
+
+    var $nameField = $form.find('[name=name]');
+    var $selectedTeam = $('#player-details-form [name=team]:checked').val();
+    var player = store.get('player')
+    if (!$nameField.val() && player) {
+        var name = player.name;
+        if (name) {
+            $nameField.val(name);
+        }
+    }
+
+    if (!$selectedTeam && player) {
+        var team = player.team;
+        if (team) {
+            $form.find('[name=team][value=' + team + ']').prop('checked', true);
+        }
+    }
+
+    $('#modal-player-details').modal('show');
 }
 
 function showWelcomeMessage() {
@@ -20,6 +44,8 @@ function setBuzzerSound(playerDetails) {
 }
 
 function validatePlayer(playerDetails) {
+    $('#player-details-form .errors').html('');
+
     socket.emit('player details', playerDetails, function (data) {
         if (data.success) {
             store.set('player', data.playerDetails);
@@ -77,11 +103,11 @@ function buzzersActive() {
 
 function onSubmitPlayerDetails(e) {
     e.preventDefault();
-    var $this = $(this);
+    var $form = $('#player-details-form');
 
     var playerDetails = {
-        name: $this.find('[name=name]').val(),
-        team: $this.find('[name=team]:checked()').val()
+        name: $form.find('[name=name]').val(),
+        team: $form.find('[name=team]:checked()').val()
     };
 
     validatePlayer(playerDetails);
@@ -137,6 +163,10 @@ function bindSockets() {
 }
 
 function bindDom() {
+    var $submitButton = $('#modal-player-details .btn-primary').hammer();
+    $submitButton.on('tap', onSubmitPlayerDetails);
+    $submitButton.on('click', function (e) { e.preventDefault(); });
+
     var $container = $('#quiz-container').hammer();
     $container.on('submit', '#player-details-form', onSubmitPlayerDetails);
     $container.on('tap', '#btn-buzzer', onBuzz);

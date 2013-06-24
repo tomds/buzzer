@@ -29,6 +29,30 @@
 
             <div id="quiz-container"></div>
         </div>
+
+        <div class="modal hide fade" id="modal-player-details">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Player details</h3>
+            </div>
+            <div class="modal-body">
+                <form id="player-details-form">
+                    <div class="errors"></div>
+                    
+                    <input name="name" placeholder="Your name" /><br />
+                    <input type="radio" name="team" value="red" id="radio-team-red" /><label for="radio-team-red">Red</label>
+                    <input type="radio" name="team" value="blue" id="radio-team-blue" /><label for="radio-team-blue">Blue</label>
+                    <input type="radio" name="team" value="green" id="radio-team-green" /><label for="radio-team-green">Green</label>
+                    <input type="radio" name="team" value="yellow" id="radio-team-yellow" /><label for="radio-team-yellow">Yellow</label><br />
+                </form>
+          </div>
+          <div class="modal-footer">
+              <a href="#" data-dismiss="modal" class="btn">Close</a>
+              <a href="#" class="btn btn-primary">Save changes</a>
+          </div>
+        </div>
+
+
         
         <script type="text/javascript" src="/socket.io/socket.io.js"></script>
         <script type="text/javascript" src="js/store-json2.min.js"></script>

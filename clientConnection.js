@@ -22,7 +22,6 @@ function bindPlayerDetailsReceived (socket) {
                             socket.broadcast.emit('player details updated', data);
                             socket.emit('state updated', {state: quiz.getState()});
                         } else {
-                            console.log(result)
                             fn({success: false, errors: result.errors});
                         }
                     });
