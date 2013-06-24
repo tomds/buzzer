@@ -23,5 +23,11 @@ quizTemplates = {
 
     buzzFail: Hogan.compile(
         '<p id="buzz-outcome">Too slow...</p>'
+    ),
+
+    playerDetails: Hogan.compile(
+        '<span class="player-name">{{ name }}</span>, ' +
+        '<span class="player-team">{{ team }}</span> team ' +
+        '<span id="edit-details-button" class="btn">Change</span>'
     )
 };

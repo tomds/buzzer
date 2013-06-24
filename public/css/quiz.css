@@ -52,3 +52,7 @@ body {
 .host-score-edit {
   color: #c8c8c8;
 }
+
+#player-details {
+  clear: both;
+}

@@ -23,16 +23,10 @@ Quiz.prototype = {
         });
     },
 
-    addPlayer: function (uuid, details, callback) {
-        var player = {
-            uuid: uuid,
-            name: details.name,
-            team: details.team
-        }
-
-        this.validatePlayer(player, function (err, result) {
+    addPlayer: function (details, callback) {
+        this.validatePlayer(details, function (err, result) {
             if (result.success) {
-                db.players.insert(player, function () {
+                db.players.insert(details, function () {
                     callback(null, result);
                 });
             } else {
@@ -41,10 +35,10 @@ Quiz.prototype = {
         });        
     },
 
-    modifyPlayer: function (uuid, details, callback) {
+    modifyPlayer: function (details, callback) {
         this.validatePlayer(details, function (err, result) {
             if (result.success) {
-                db.players.update({uuid: uuid}, {$set: {name: details.name, team: details.team}}, {upsert: true}, function () {
+                db.players.update({uuid: details.uuid}, {$set: {name: details.name, team: details.team}}, {upsert: true}, function () {
                     callback(null, result);
                 });
             } else {
@@ -71,7 +65,11 @@ Quiz.prototype = {
             success = false;
         }
 
-        db.players.find({team: details.team, name: details.name}, function (err, players) {
+        db.players.find({
+            team: details.team,
+            name: details.name,
+            uuid: {$ne: details.uuid}
+        }, function (err, players) {
             if (players.length) {
                 success = false;
                 errors.name.push('Someone on your team already has that name - please choose another');

@@ -9,38 +9,31 @@ function bindPlayerDetailsReceived (socket) {
     // If this connection already has a player on it, update the player's details,
     // else save the new player to the db and associate it with this connection
     socket.on('player details', function (data, fn) {
-        socket.get('playerDetails', function (err, playerDetails) {
-            var uuid;
-
-            if (!playerDetails) { // No player details attached to socket
-                if (data.uuid) { // But data from a previous session
-                    uuid = data.uuid;
-                    quiz.modifyPlayer(uuid, data, function (err, result) {
-                        if (result.success) {
-                            fn({success: true, playerDetails: data});
-                            socket.set('playerDetails', data);
-                            socket.broadcast.emit('player details updated', data);
-                            socket.emit('state updated', {state: quiz.getState()});
-                        } else {
-                            fn({success: false, errors: result.errors});
-                        }
-                    });
-                } else { // Has never played before
-                    uuid = UUID.create().toString();
-                    quiz.addPlayer(uuid, data, function (err, result) {
-                        if (result.success) {
-                            _.extend(data, {uuid: uuid});
-                            fn({success: true, playerDetails: data});
-                            socket.set('playerDetails', data);
-                            socket.broadcast.emit('player details updated', data);
-                            socket.emit('state updated', {state: quiz.getState()});
-                        } else {
-                            fn({success: false, errors: result.errors});
-                        }
-                    });
+        if (data.uuid) { // But data from a previous session
+            quiz.modifyPlayer(data, function (err, result) {
+                if (result.success) {
+                    fn({success: true, playerDetails: data});
+                    socket.set('playerDetails', data);
+                    socket.broadcast.emit('player details updated', data);
+                    socket.emit('state updated', {state: quiz.getState()});
+                } else {
+                    fn({success: false, errors: result.errors});
                 }
-            } // Else has an active session on this socket
-        });
+            });
+        } else { // Has never played before
+            var uuid = UUID.create().toString();
+            _.extend(data, {uuid: uuid});
+            quiz.addPlayer(data, function (err, result) {
+                if (result.success) {
+                    fn({success: true, playerDetails: data});
+                    socket.set('playerDetails', data);
+                    socket.broadcast.emit('player details updated', data);
+                    socket.emit('state updated', {state: quiz.getState()});
+                } else {
+                    fn({success: false, errors: result.errors});
+                }
+            });
+        }
     });
 }
 

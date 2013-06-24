@@ -3,7 +3,7 @@
  - DONE Display scores (host and players)
  - DONE Validate player names/teams
  - Lock down admin
- - Players: edit name/team
+ - DONE Players: edit name/team
  - DONE Kick players with no active connection
  - Make prettier (and fit nicely on all devices)
  - Host: view team allocations

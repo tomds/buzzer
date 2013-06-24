@@ -3,8 +3,6 @@ var gameState = '';
 var buzzerSound;
 
 function showPlayerDetailsForm(errors) {
-    $('#quiz-container').html('');
-
     var $form = $('#player-details-form');
     if (errors && !errors.success) {
         $form.find('.errors').html(quizTemplates.validationErrors.render(errors.errors));
@@ -51,6 +49,7 @@ function validatePlayer(playerDetails) {
             store.set('player', data.playerDetails);
             setBuzzerSound(data.playerDetails);
             $('#quiz-container').html('');
+            $('#player-details').html(quizTemplates.playerDetails.render(data.playerDetails));
             $('#modal-player-details').modal('hide');
         } else {
             showPlayerDetailsForm(data);
@@ -110,6 +109,11 @@ function onSubmitPlayerDetails(e) {
         name: $form.find('[name=name]').val(),
         team: $form.find('[name=team]:checked()').val()
     };
+
+    var storedPlayer = store.get('player');
+    if (storedPlayer) {
+        playerDetails.uuid = storedPlayer.uuid;
+    }
 
     validatePlayer(playerDetails);
 }
@@ -171,6 +175,9 @@ function bindDom() {
 
     var $container = $('#quiz-container').hammer();
     $container.on('tap', '#btn-buzzer', onBuzz);
+    $('.masthead').hammer().on('tap', '#edit-details-button', function (e) {
+        showPlayerDetailsForm();
+    });
 }
 
 function init() {
