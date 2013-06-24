@@ -8,7 +8,7 @@
  - Make prettier (and fit nicely on all devices)
  - Host: view team allocations
  ----------------
+ - Host: kick players
+ - Minify/concat JS
  - Host: end quiz (back to lobby)
  - Host: clear all clients' localStorage
- - Minify/concat JS
- - Host: kick players

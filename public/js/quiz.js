@@ -88,10 +88,9 @@ function getButtonClass(team) {
 }
 
 function showGame() {
-    // Don't show the button until this player is actually in the game.
-    // If they are still entering details, don't do anything.
-    if (!$('#player-details-form').length && !$('#buzzer-active').length) {
-        var buttonClass = getButtonClass(store.get('player').team);
+    var player = store.get('player');
+    if (player) {
+        var buttonClass = getButtonClass(player.team);
         $('#quiz-container').html(quizTemplates.buzzerActive.render({buttonClass: buttonClass}));
     }
 }
