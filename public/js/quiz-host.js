@@ -31,6 +31,12 @@ function updateTeamLists(data) {
     $team.find('ul').prepend(quizTemplates.playerEntry.render(data));
 }
 
+function onPlayerDisconnected (data) {
+    var $teams = $('#teams');
+    $teams.find('li[data-uuid=' + data.uuid + ']').remove();
+    updateTeamNumbers();
+}
+
 function listenBuzzers() {
     if (!$('#game-in-progress').length) {
         $('#quiz-container').html(quizTemplates.listenBuzzers.render());
@@ -118,6 +124,8 @@ function bindSockets() {
         updateTeamLists(data);
         updateTeamNumbers();
     });
+
+    socket.on('player disconnected', onPlayerDisconnected);
 
     socket.on('state updated', onStateUpdated);
     socket.on('scores updated', onScoresUpdated);

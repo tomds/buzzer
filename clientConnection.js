@@ -105,6 +105,18 @@ function bindChangeScore(socket) {
     });
 }
 
+function bindDisconnect(socket) {
+    socket.on('disconnect', function () {
+        socket.get('playerDetails', function (err, details) {
+            if (details) {
+                quiz.removePlayer(details, function () {
+                    socket.broadcast.emit('player disconnected', {uuid: details.uuid});
+                });
+            }
+        });
+    });
+}
+
 exports.init = function (socket) {
     bindPlayerDetailsReceived(socket);
     bindHostRequestTeamList(socket);
@@ -112,6 +124,7 @@ exports.init = function (socket) {
     bindRequestState(socket);
     bindBuzz(socket);
     bindChangeScore(socket);
+    bindDisconnect(socket);
 
     requestPlayerDetails(socket);
     sendScores(socket);

@@ -6,7 +6,7 @@ function showPlayerDetailsForm(errors) {
     $('#quiz-container').html('');
 
     var $form = $('#player-details-form');
-    if (!errors.success) {
+    if (errors && !errors.success) {
         $form.find('.errors').html(quizTemplates.validationErrors.render(errors.errors));
     }
 
@@ -51,6 +51,7 @@ function validatePlayer(playerDetails) {
             store.set('player', data.playerDetails);
             setBuzzerSound(data.playerDetails);
             $('#quiz-container').html('');
+            $('#modal-player-details').modal('hide');
         } else {
             showPlayerDetailsForm(data);
         }

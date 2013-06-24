@@ -81,6 +81,12 @@ Quiz.prototype = {
         });
     },
 
+    removePlayer: function (details, callback) {
+        db.players.remove({uuid: details.uuid}, function () {
+            callback();
+        });
+    },
+
     getAllPlayers: function (callback) {
         db.players.find({}, function (err, players) {
             callback(players);
