@@ -12,7 +12,8 @@ function getFullTeamsUpdate() {
 }
 
 function showWelcomeMessage() {
-    $('#quiz-container').html(quizTemplates.lobby.render());
+    $('#btn-reset-buzzers').hide();
+    $('#btn-start-game').show();
     getFullTeamsUpdate();
 }
 
@@ -40,12 +41,16 @@ function onPlayerDisconnected (data) {
 function listenBuzzers() {
     if (!$('#game-in-progress').length) {
         $('#quiz-container').html(quizTemplates.listenBuzzers.render());
+        $('#btn-reset-buzzers').show();
+        $('#btn-start-game').hide();
     }
 }
 
 function buzzersInactive() {
     if (!$('#player-buzzed').length) {
         $('#quiz-container').html(quizTemplates.buzzersInactive.render());
+        $('#btn-reset-buzzers').show();
+        $('#btn-start-game').hide();
     }
 }
 
@@ -102,6 +107,7 @@ function onScoresUpdated(data) {
 
 function showHostControls() {
     $('.score .value').after(quizTemplates.hostScoreEdit.render());
+    $('#lobby-container').html(quizTemplates.lobby.render());
 }
 
 function changeScore(e) {
@@ -134,10 +140,9 @@ function bindSockets() {
 }
 
 function bindDom() {
-    var $container = $('#quiz-container').hammer();
-
-    $container.on('tap', '#btn-start-game, #btn-reset-buzzers', activateBuzzers);
-    $container.on('tap', '#btn-init-sounds', initSounds);
+    $('#quiz-container').hammer().on('tap', '#btn-reset-buzzers', activateBuzzers);
+    $('#lobby-container').hammer().on('tap', '#btn-start-game', activateBuzzers);
+    $('#lobby-container').hammer().on('tap', '#btn-init-sounds', initSounds);
     $('#scores').hammer().on('tap', '.host-score-edit span[data-direction]', changeScore);
 }
 
