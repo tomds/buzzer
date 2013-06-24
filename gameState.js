@@ -56,6 +56,22 @@ Quiz.prototype = {
         db.scores.findOne({}, function (err, scores) {
             callback(null, scores);
         });
+    },
+
+    changeScore: function (data, callback) {
+        var incDec = data.direction === 'up' ? 1 : -1;
+        var team = data.team
+        var self = this;
+
+        var updateSubObject = {};
+        updateSubObject[team] = incDec;
+        var updateObject = {$inc: updateSubObject};
+
+        db.scores.update({}, updateObject, function (err) {
+            self.getScores(function (err, scores) {
+                callback(null, scores);
+            });
+        });
     }
 };
 

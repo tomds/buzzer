@@ -84,12 +84,24 @@ function bindBuzz(socket) {
     });
 }
 
+function bindChangeScore(socket) {
+    socket.on('host change score', function (data) {
+        quiz.changeScore(data, function (error, scores) {
+            if (!error) {
+                socket.emit('scores updated', scores);
+                socket.broadcast.emit('scores updated', scores);
+            }
+        });
+    });
+}
+
 exports.init = function (socket) {
     bindPlayerDetailsReceived(socket);
     bindHostRequestTeamList(socket);
     bindUpdateState(socket);
     bindRequestState(socket);
     bindBuzz(socket);
+    bindChangeScore(socket);
 
     requestPlayerDetails(socket);
     sendScores(socket);

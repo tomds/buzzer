@@ -1,12 +1,13 @@
  - DONE Buzzer audio
- - Edit scores
+ - DONE Edit scores
  - DONE Display scores (host and players)
  - Players: edit name/team
  - Kick players with no active connection
  - Make prettier (and fit nicely on all devices)
+ - Validate player names/teams
  - Lock down admin
- ----------------
  - Host: view team allocations
+ ----------------
  - Host: end quiz (back to lobby)
  - Host: clear all clients' localStorage
  - Host: kick players

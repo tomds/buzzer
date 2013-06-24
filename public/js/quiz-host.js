@@ -98,6 +98,13 @@ function showHostControls() {
     $('.score .value').after(quizTemplates.hostScoreEdit.render());
 }
 
+function changeScore(e) {
+    var $this = $(this);
+    var team = $this.closest('.score').data('team');
+    var direction = $this.data('direction');
+    socket.emit('host change score', {team: team, direction: direction});
+}
+
 function bindSockets() {
     socket.on('request player details', function () {
         // This signifies that the connection has been established. Pay no attention
@@ -123,6 +130,7 @@ function bindDom() {
 
     $container.on('tap', '#btn-start-game, #btn-reset-buzzers', activateBuzzers);
     $container.on('tap', '#btn-init-sounds', initSounds);
+    $('#scores').hammer().on('tap', '.host-score-edit span[data-direction]', changeScore);
 }
 
 function init() {

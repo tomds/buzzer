@@ -51,8 +51,8 @@ quizTemplates = {
 
     hostScoreEdit: Hogan.compile(
         '<div class="host-score-edit">' +
-            '<span class="up">+</span>&nbsp;&nbsp;' +
-            '<span class="down">-</div>' +
+            '<span class="btn" data-direction="up">+</span>&nbsp;&nbsp;' +
+            '<span class="btn" data-direction="down">-</div>' +
         '</div>'
     )
 };
