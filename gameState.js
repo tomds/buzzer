@@ -23,18 +23,62 @@ Quiz.prototype = {
         });
     },
 
-    addPlayer: function (uuid, details) {
+    addPlayer: function (uuid, details, callback) {
         var player = {
             uuid: uuid,
             name: details.name,
             team: details.team
         }
 
-        db.players.insert(player);
+        this.validatePlayer(player, function (err, result) {
+            if (result.success) {
+                db.players.insert(player, function () {
+                    callback(null, result);
+                });
+            } else {
+                callback(null, result);
+            }
+        });        
     },
 
-    modifyPlayer: function (uuid, details) {
-        db.players.update({uuid: uuid}, {$set: {name: details.name, team: details.team}}, {upsert: true});
+    modifyPlayer: function (uuid, details, callback) {
+        this.validatePlayer(details, function (err, result) {
+            if (result.success) {
+                db.players.update({uuid: uuid}, {$set: {name: details.name, team: details.team}}, {upsert: true}, function () {
+                    callback(null, result);
+                });
+            } else {
+                callback(null, result);
+            }
+        });
+    },
+
+    validatePlayer: function (details, callback) {
+        var errors = {
+            name: [],
+            team: []
+        };
+        var validTeams = ['red', 'blue', 'green', 'yellow'];
+        var success = true;
+
+        if (validTeams.indexOf(details.team) === -1) {
+            errors.team.push('Please choose a valid team');
+            success = false;
+        }
+
+        if (!details.name) {
+            errors.name.push('Name is a mandatory field');
+            success = false;
+        }
+
+        db.players.find({team: details.team, name: details.name}, function (err, players) {
+            if (players.length) {
+                success = false;
+                errors.name.push('Someone on your team already has that name - please choose another');
+            }
+
+            callback (null, {success: success, errors: errors});
+        });
     },
 
     getAllPlayers: function (callback) {

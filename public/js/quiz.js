@@ -3,7 +3,7 @@ var gameState = '';
 var buzzerSound;
 
 function showPlayerDetailsForm(errors) {
-    $('#quiz-container').html(quizTemplates.playerDetailsForm.render());
+    $('#quiz-container').html(quizTemplates.playerDetailsForm.render(errors));
 }
 
 function showWelcomeMessage() {
@@ -26,7 +26,7 @@ function validatePlayer(playerDetails) {
             setBuzzerSound(data.playerDetails);
             $('#quiz-container').html('');
         } else {
-            showPlayerDetailsForm(data.errors);
+            showPlayerDetailsForm(data);
         }
     });
 }
