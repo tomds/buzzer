@@ -1,10 +1,10 @@
  - DONE Buzzer audio
  - DONE Edit scores
  - DONE Display scores (host and players)
- - Validate player names/teams
+ - DONE Validate player names/teams
  - Lock down admin
  - Players: edit name/team
- - Kick players with no active connection
+ - DONE Kick players with no active connection
  - Make prettier (and fit nicely on all devices)
  - Host: view team allocations
  ----------------

@@ -166,10 +166,10 @@ function bindSockets() {
 function bindDom() {
     var $submitButton = $('#modal-player-details .btn-primary').hammer();
     $submitButton.on('tap', onSubmitPlayerDetails);
+    $('#player-details-form').on('submit', onSubmitPlayerDetails);
     $submitButton.on('click', function (e) { e.preventDefault(); });
 
     var $container = $('#quiz-container').hammer();
-    $container.on('submit', '#player-details-form', onSubmitPlayerDetails);
     $container.on('tap', '#btn-buzzer', onBuzz);
 }
 
