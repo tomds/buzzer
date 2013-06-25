@@ -43,11 +43,16 @@
                 <form id="player-details-form">
                     <div class="errors"></div>
 
-                    <input name="name" placeholder="Your name" /><br />
-                    <input type="radio" name="team" value="red" id="radio-team-red" /><label for="radio-team-red">Red</label>
-                    <input type="radio" name="team" value="blue" id="radio-team-blue" /><label for="radio-team-blue">Blue</label>
-                    <input type="radio" name="team" value="green" id="radio-team-green" /><label for="radio-team-green">Green</label>
-                    <input type="radio" name="team" value="yellow" id="radio-team-yellow" /><label for="radio-team-yellow">Yellow</label><br />
+
+                    <label for="input-name" id="label-name" class="title">Name</label><input id="input-name" name="name" placeholder="Your name" /><br />
+
+                    <label class="title" id="label-team">Team</label>
+                    <div id="team-radios">
+                        <input type="radio" name="team" value="red" id="radio-team-red" /><label for="radio-team-red" class="inline">Red</label>
+                        <input type="radio" name="team" value="blue" id="radio-team-blue" /><label for="radio-team-blue" class="inline">Blue</label>
+                        <input type="radio" name="team" value="green" id="radio-team-green" /><label for="radio-team-green" class="inline">Green</label>
+                        <input type="radio" name="team" value="yellow" id="radio-team-yellow" /><label for="radio-team-yellow" class="inline">Yellow</label>
+                    </div>
                 </form>
           </div>
           <div class="modal-footer">

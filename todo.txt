@@ -11,4 +11,4 @@
  - DONE Host: kick players
  - Minify/concat JS
  - Host: end quiz (back to lobby)
- - Host: clear all clients' localStorage
+ 
