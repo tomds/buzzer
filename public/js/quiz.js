@@ -223,7 +223,7 @@ function bindSockets() {
 
 function bindDom() {
     var $submitButton = $('#modal-player-details .btn-primary').hammer();
-    $submitButton.on('tap', onSubmitPlayerDetails);
+    $submitButton.on('click', onSubmitPlayerDetails);
     $('#player-details-form').on('submit', onSubmitPlayerDetails);
     $submitButton.on('click', function (e) { e.preventDefault(); });
 

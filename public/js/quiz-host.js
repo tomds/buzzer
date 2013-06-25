@@ -177,7 +177,7 @@ function bindDom() {
     var $lobby = $('#lobby-container').hammer();
     $lobby.on('tap', '#btn-start-game', activateBuzzers);
     $lobby.on('tap', '#btn-init-sounds', initSounds);
-    $lobby.on('tap', '#btn-change-password', changePassword);
+    $lobby.on('click', '#btn-change-password', changePassword);
     $lobby.on('tap', '.kick-player', kickPlayer);
 
     $('#scores').hammer().on('tap', '.host-score-edit div[data-direction]', changeScore);
