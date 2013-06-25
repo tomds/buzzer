@@ -9,11 +9,18 @@ var quiz = new gameState.Quiz();
 var secret = 'kIdNnQ<2Yic4x)BG(=TfAf%xXXHcZ#';
 
 function verifyHost(socket, callback) {
-    var token = randomstring.generate(30);
-    var hashed = Crypto.HMAC(Crypto.SHA256, token, secret);
-    socket.emit('host auth challenge', token, function (response) {
-        if (response === hashed) {
+    socket.get('hostAuthenticated', function (err, authenticated) {
+        if (authenticated) {
             callback();
+        } else {
+            var token = randomstring.generate(30);
+            var hashed = Crypto.HMAC(Crypto.SHA256, token, secret);
+            socket.emit('host auth challenge', token, function (response) {
+                if (response === hashed) {
+                    socket.set('hostAuthenticated', 'true');
+                    callback();
+                }
+            });
         }
     });
 }
