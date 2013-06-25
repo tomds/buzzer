@@ -131,10 +131,16 @@ function getSecret() {
     }
 }
 
+function changePassword() {
+    $('#modal-host-password').modal('show');
+}
+
 function setSecret(e) {
     e.preventDefault();
-    store.set('secret', $('#host-password-form input[name=password]').val());
+    var $password = $('#host-password-form input[name=password]');
+    store.set('secret', $password.val());
     $('#modal-host-password').modal('hide');
+    $password.val('');
 }
 
 function bindSockets() {
@@ -163,8 +169,12 @@ function bindSockets() {
 
 function bindDom() {
     $('#quiz-container').hammer().on('tap', '#btn-reset-buzzers', activateBuzzers);
-    $('#lobby-container').hammer().on('tap', '#btn-start-game', activateBuzzers);
-    $('#lobby-container').hammer().on('tap', '#btn-init-sounds', initSounds);
+
+    var $lobby = $('#lobby-container').hammer();
+    $lobby.on('tap', '#btn-start-game', activateBuzzers);
+    $lobby.on('tap', '#btn-init-sounds', initSounds);
+    $lobby.on('tap', '#btn-change-password', changePassword);
+
     $('#scores').hammer().on('tap', '.host-score-edit span[data-direction]', changeScore);
 
     var $submitButton = $('#modal-host-password .btn-primary').hammer();
