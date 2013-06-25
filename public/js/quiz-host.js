@@ -175,7 +175,7 @@ function bindDom() {
     $lobby.on('tap', '#btn-init-sounds', initSounds);
     $lobby.on('tap', '#btn-change-password', changePassword);
 
-    $('#scores').hammer().on('tap', '.host-score-edit span[data-direction]', changeScore);
+    $('#scores').hammer().on('tap', '.host-score-edit div[data-direction]', changeScore);
 
     var $submitButton = $('#modal-host-password .btn-primary').hammer();
     $submitButton.on('tap', setSecret);
