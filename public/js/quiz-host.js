@@ -152,6 +152,7 @@ function bindSockets() {
         // to the message name, it's completely unrelated to its purpose! Makes more
         // sense if you're a normal player, honest ;)
 
+        showWelcomeMessage();
         getState();
     });
 
