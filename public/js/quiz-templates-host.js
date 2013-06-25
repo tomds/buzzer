@@ -6,22 +6,22 @@ quizTemplates = {
         '<div id="btn-change-password" class="btn">Change password</div>' +
         '<div id="teams">'+
             '<div class="team-list-full red">' +
-                '<h2>Red team: <span class="num-players">0</span> players</h2>' +
+                '<h3>Red team: <span class="num-players">0</span> players</h3>' +
                 '<ul></ul>' +
             '</div>' +
 
             '<div class="team-list-full blue">' +
-                '<h2>Blue team: <span class="num-players">0</span> players</h2>' +
+                '<h3>Blue team: <span class="num-players">0</span> players</h3>' +
                 '<ul></ul>' +
             '</div>' +
 
             '<div class="team-list-full green">' +
-                '<h2>Green team: <span class="num-players">0</span> players</h2>' +
+                '<h3>Green team: <span class="num-players">0</span> players</h3>' +
                 '<ul></ul>' +
             '</div>' +
 
             '<div class="team-list-full yellow">' +
-                '<h2>Yellow team: <span class="num-players">0</span> players</h2>' +
+                '<h3>Yellow team: <span class="num-players">0</span> players</h3>' +
                 '<ul></ul>' +
             '</div>' +
         '</div>'

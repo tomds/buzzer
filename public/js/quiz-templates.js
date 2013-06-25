@@ -19,8 +19,8 @@ quizTemplates = {
     ),
 
     playerDetails: Hogan.compile(
-        '<span class="player-name">{{ name }}</span>, ' +
-        '<span class="player-team">{{ team }}</span> team ' +
+        '<strong><span class="player-name">{{ name }}</span>, ' +
+        '<span class="player-team {{ team }}">{{ team }} team</span></strong> ' +
         '<span id="edit-details-button" class="btn">Change</span>'
     ),
 
@@ -28,22 +28,22 @@ quizTemplates = {
         '<div id="welcome-message">' +
             '<div id="teams">'+
                 '<div class="team-list-full red">' +
-                    '<h2>Red team: <span class="num-players">0</span> players</h2>' +
+                    '<h3>Red team: <span class="num-players">0</span> players</h3>' +
                     '<ul></ul>' +
                 '</div>' +
 
                 '<div class="team-list-full blue">' +
-                    '<h2>Blue team: <span class="num-players">0</span> players</h2>' +
+                    '<h3>Blue team: <span class="num-players">0</span> players</h3>' +
                     '<ul></ul>' +
                 '</div>' +
 
                 '<div class="team-list-full green">' +
-                    '<h2>Green team: <span class="num-players">0</span> players</h2>' +
+                    '<h3>Green team: <span class="num-players">0</span> players</h3>' +
                     '<ul></ul>' +
                 '</div>' +
 
                 '<div class="team-list-full yellow">' +
-                    '<h2>Yellow team: <span class="num-players">0</span> players</h2>' +
+                    '<h3>Yellow team: <span class="num-players">0</span> players</h3>' +
                     '<ul></ul>' +
                 '</div>' +
             '</div>' +

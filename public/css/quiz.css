@@ -16,6 +16,26 @@ body {
   margin: 30px 0;
 }
 
+.red {
+  color: red;
+}
+
+.blue {
+  color: #3399FF;
+}
+
+.green {
+  color: green;
+}
+
+.yellow {
+  color: yellow;
+}
+
+.team-list-full li {
+  color: #c8c8c8;
+}
+
 
 label.inline {
   display: inline-block;
