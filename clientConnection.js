@@ -154,7 +154,7 @@ exports.init = function (socket) {
     bindRequestState(socket);
     bindBuzz(socket);
     bindChangeScore(socket);
-    bindDisconnect(socket);
+    // bindDisconnect(socket);
     bindKickPlayer(socket);
 
     requestPlayerDetails(socket);
