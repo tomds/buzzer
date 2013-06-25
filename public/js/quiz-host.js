@@ -105,6 +105,14 @@ function onScoresUpdated(data) {
     }
 }
 
+function onHostAuthChallenge(token, fn) {
+    var secret = store.get('secret');
+    if (secret) {
+        var hexdigest = CryptoJS.HmacSHA256(token, secret).toString();
+        fn(hexdigest);
+    }
+}
+
 function showHostControls() {
     $('.score .value').after(quizTemplates.hostScoreEdit.render());
     $('#lobby-container').html(quizTemplates.lobby.render());
@@ -115,6 +123,18 @@ function changeScore(e) {
     var team = $this.closest('.score').data('team');
     var direction = $this.data('direction');
     socket.emit('host change score', {team: team, direction: direction});
+}
+
+function getSecret() {
+    if (!store.get('secret')) {
+        $('#modal-host-password').modal('show');
+    }
+}
+
+function setSecret(e) {
+    e.preventDefault();
+    store.set('secret', $('#host-password-form input[name=password]').val());
+    $('#modal-host-password').modal('hide');
 }
 
 function bindSockets() {
@@ -137,6 +157,8 @@ function bindSockets() {
     socket.on('scores updated', onScoresUpdated);
 
     socket.on('player buzzed', onPlayerBuzz);
+
+    socket.on('host auth challenge', onHostAuthChallenge);
 }
 
 function bindDom() {
@@ -144,12 +166,19 @@ function bindDom() {
     $('#lobby-container').hammer().on('tap', '#btn-start-game', activateBuzzers);
     $('#lobby-container').hammer().on('tap', '#btn-init-sounds', initSounds);
     $('#scores').hammer().on('tap', '.host-score-edit span[data-direction]', changeScore);
+
+    var $submitButton = $('#modal-host-password .btn-primary').hammer();
+    $submitButton.on('tap', setSecret);
+    $('#host-password-form').on('submit', setSecret);
+    $submitButton.on('click', function (e) { e.preventDefault(); });
 }
 
 function init() {
     bindDom();
     bindSockets();
     showHostControls();
+
+    getSecret();
 }
 
 init();

@@ -1,11 +1,24 @@
 var gameState = require('./gameState');
 var UUID = require('uuid-js');
 var _ = require('underscore');
+var Crypto = require('cryptojs').Crypto;
+var randomstring = require('randomstring');
 
 
 var quiz = new gameState.Quiz();
+var secret = 'kIdNnQ<2Yic4x)BG(=TfAf%xXXHcZ#';
 
-function bindPlayerDetailsReceived (socket) {
+function verifyHost(socket, callback) {
+    var token = randomstring.generate(30);
+    var hashed = Crypto.HMAC(Crypto.SHA256, token, secret);
+    socket.emit('host auth challenge', token, function (response) {
+        if (response === hashed) {
+            callback();
+        }
+    });
+}
+
+function bindPlayerDetailsReceived(socket) {
     // If this connection already has a player on it, update the player's details,
     // else save the new player to the db and associate it with this connection
     socket.on('player details', function (data, fn) {
@@ -47,9 +60,11 @@ function bindHostRequestTeamList(socket) {
 
 function bindUpdateState(socket) {
     socket.on('host update state', function (data) {
-        quiz.updateState(data.state);
-        socket.emit('state updated', data);
-        socket.broadcast.emit('state updated', data);
+        verifyHost(socket, function () {
+            quiz.updateState(data.state);
+            socket.emit('state updated', data);
+            socket.broadcast.emit('state updated', data);
+        });
     });
 }
 
@@ -89,11 +104,13 @@ function bindBuzz(socket) {
 
 function bindChangeScore(socket) {
     socket.on('host change score', function (data) {
-        quiz.changeScore(data, function (error, scores) {
-            if (!error) {
-                socket.emit('scores updated', scores);
-                socket.broadcast.emit('scores updated', scores);
-            }
+        verifyHost(socket, function () {
+            quiz.changeScore(data, function (error, scores) {
+                if (!error) {
+                    socket.emit('scores updated', scores);
+                    socket.broadcast.emit('scores updated', scores);
+                }
+            });
         });
     });
 }
