@@ -56,3 +56,7 @@ body {
 #player-details {
   clear: both;
 }
+
+.you {
+  font-weight: bold;
+}

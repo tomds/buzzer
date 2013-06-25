@@ -1,8 +1,13 @@
 var socket = io.connect();
-var sounds = {};
+var sounds = {
+    red: new Howl({urls: ['audio/buzzer_red.mp3']}),
+    blue: new Howl({urls: ['audio/buzzer_blue.mp3']}),
+    green: new Howl({urls: ['audio/buzzer_green.mp3']}),
+    yellow: new Howl({urls: ['audio/buzzer_yellow.mp3']})
+};
 
 function getFullTeamsUpdate() {
-    socket.emit('host request team list', function (data) {
+    socket.emit('request team list', function (data) {
         $.each(data.players, function () {
             updateTeamLists(this);
         });
@@ -86,13 +91,6 @@ function getState () {
 }
 
 function initSounds() {
-    sounds = {
-        red: new Howl({urls: ['audio/buzzer_red.mp3']}),
-        blue: new Howl({urls: ['audio/buzzer_blue.mp3']}),
-        green: new Howl({urls: ['audio/buzzer_green.mp3']}),
-        yellow: new Howl({urls: ['audio/buzzer_yellow.mp3']})
-    };
-
     sounds.red.play();
     sounds.blue.play();
     sounds.green.play();

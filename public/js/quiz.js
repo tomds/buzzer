@@ -30,8 +30,9 @@ function showPlayerDetailsForm(errors) {
 
 function showWelcomeMessage() {
     if (!$('#welcome-message').length) {
-        $('#quiz-container').html(quizTemplates.welcomeMessage.render(store.get('player')));
+        $('#quiz-container').html(quizTemplates.welcomeMessage.render());
     }
+    getFullTeamsUpdate();
 }
 
 function setBuzzerSound(playerDetails) {
@@ -48,7 +49,6 @@ function validatePlayer(playerDetails) {
         if (data.success) {
             store.set('player', data.playerDetails);
             setBuzzerSound(data.playerDetails);
-            $('#quiz-container').html('');
             $('#player-details').html(quizTemplates.playerDetails.render(data.playerDetails));
             $('#modal-player-details').modal('hide');
         } else {
@@ -160,6 +160,38 @@ function onBuzz(e) {
     }
 }
 
+function updateTeamNumbers() {
+    $('.team-list-full').each(function () {
+        var $this = $(this);
+        var numPlayers = $this.find('li').length;
+        $this.find('.num-players').text(numPlayers);
+    });
+}
+
+function updateTeamLists(data) {
+    var player = store.get('player');
+    var you = false;
+    if (player && player.uuid === data.uuid) {
+        you = true;
+    }
+    data.you = you;
+
+    var $teams = $('#teams');
+    $teams.find('li[data-uuid=' + data.uuid + ']').remove();
+    var $team = $teams.find('.team-list-full.' + data.team);
+    $team.find('ul').prepend(quizTemplates.playerEntry.render(data));
+}
+
+function getFullTeamsUpdate() {
+    socket.emit('request team list', function (data) {
+        $.each(data.players, function () {
+            updateTeamLists(this);
+        });
+
+        updateTeamNumbers();
+    });
+}
+
 function onPlayerDisconnected(details) {
     var player = store.get('player');
 
@@ -167,14 +199,26 @@ function onPlayerDisconnected(details) {
     if (player && player.uuid === details.uuid) {
         store.clear();
         window.location.reload();
+    } else {
+        var $teams = $('#teams');
+        $teams.find('li[data-uuid=' + details.uuid + ']').remove();
+        updateTeamNumbers();
     }
 }
 
 function bindSockets() {
-    socket.on('request player details', getPlayerDetails);
+    socket.on('request player details', function () {
+        getFullTeamsUpdate();
+        getPlayerDetails();
+    });
     socket.on('state updated', onStateUpdated);
     socket.on('scores updated', onScoresUpdated);
     socket.on('player disconnected', onPlayerDisconnected);
+
+    socket.on('player details updated', function (data) {
+        updateTeamLists(data);
+        updateTeamNumbers();
+    });
 }
 
 function bindDom() {
@@ -193,6 +237,8 @@ function bindDom() {
 function init() {
     bindDom();
     bindSockets();
+
+    showWelcomeMessage();
 }
 
 init();

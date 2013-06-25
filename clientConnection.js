@@ -34,6 +34,7 @@ function bindPlayerDetailsReceived(socket) {
                 if (result.success) {
                     fn({success: true, playerDetails: data});
                     socket.set('playerDetails', data);
+                    socket.emit('player details updated', data);
                     socket.broadcast.emit('player details updated', data);
                     socket.emit('state updated', {state: quiz.getState()});
                 } else {
@@ -47,6 +48,7 @@ function bindPlayerDetailsReceived(socket) {
                 if (result.success) {
                     fn({success: true, playerDetails: data});
                     socket.set('playerDetails', data);
+                    socket.emit('player details updated', data);
                     socket.broadcast.emit('player details updated', data);
                     socket.emit('state updated', {state: quiz.getState()});
                 } else {
@@ -57,8 +59,8 @@ function bindPlayerDetailsReceived(socket) {
     });
 }
 
-function bindHostRequestTeamList(socket) {
-    socket.on('host request team list', function (fn) {
+function bindRequestTeamList(socket) {
+    socket.on('request team list', function (fn) {
         quiz.getAllPlayers(function (players) {
             fn({players: players});
         });
@@ -148,7 +150,7 @@ function bindDisconnect(socket) {
 
 exports.init = function (socket) {
     bindPlayerDetailsReceived(socket);
-    bindHostRequestTeamList(socket);
+    bindRequestTeamList(socket);
     bindUpdateState(socket);
     bindRequestState(socket);
     bindBuzz(socket);
