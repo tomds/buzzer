@@ -196,7 +196,7 @@ function onPlayerDisconnected(details) {
     var player = store.get('player');
 
     // If the player who has disconnected is me, I have been kicked
-    if (player && player.uuid === details.uuid) {
+    if (player && player.uuid === details.uuid && details.kicked) {
         store.clear();
         window.location.reload();
     } else {

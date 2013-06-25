@@ -127,10 +127,9 @@ function bindChangeScore(socket) {
 function bindKickPlayer(socket) {
     socket.on('host kick player', function (uuid) {
         verifyHost(socket, function () {
-            console.log('face');
             quiz.removePlayer(uuid, function () {
-                socket.emit('player disconnected', {uuid: uuid});
-                socket.broadcast.emit('player disconnected', {uuid: uuid});
+                socket.emit('player disconnected', {uuid: uuid, kicked: true});
+                socket.broadcast.emit('player disconnected', {uuid: uuid, kicked: true});
             });
         });
     });
