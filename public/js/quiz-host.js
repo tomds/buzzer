@@ -143,6 +143,11 @@ function setSecret(e) {
     $password.val('');
 }
 
+function kickPlayer (e) {
+    var uuid = $(this).closest('li').data('uuid');
+    socket.emit('host kick player', uuid);
+}
+
 function bindSockets() {
     socket.on('request player details', function () {
         // This signifies that the connection has been established. Pay no attention
@@ -174,6 +179,7 @@ function bindDom() {
     $lobby.on('tap', '#btn-start-game', activateBuzzers);
     $lobby.on('tap', '#btn-init-sounds', initSounds);
     $lobby.on('tap', '#btn-change-password', changePassword);
+    $lobby.on('tap', '.kick-player', kickPlayer);
 
     $('#scores').hammer().on('tap', '.host-score-edit div[data-direction]', changeScore);
 

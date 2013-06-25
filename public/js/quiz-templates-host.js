@@ -28,7 +28,7 @@ quizTemplates = {
     ),
 
     playerEntry: Hogan.compile(
-        '<li data-uuid="{{ uuid }}">{{ name }}</li>'
+        '<li data-uuid="{{ uuid }}">{{ name }} &nbsp;<span class="kick-player btn">Kick</span></li>'
     ),
 
     listenBuzzers: Hogan.compile(

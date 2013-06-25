@@ -79,8 +79,8 @@ Quiz.prototype = {
         });
     },
 
-    removePlayer: function (details, callback) {
-        db.players.remove({uuid: details.uuid}, function () {
+    removePlayer: function (uuid, callback) {
+        db.players.remove({uuid: uuid}, function () {
             callback();
         });
     },

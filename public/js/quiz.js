@@ -160,10 +160,21 @@ function onBuzz(e) {
     }
 }
 
+function onPlayerDisconnected(details) {
+    var player = store.get('player');
+
+    // If the player who has disconnected is me, I have been kicked
+    if (player && player.uuid === details.uuid) {
+        store.clear();
+        window.location.reload();
+    }
+}
+
 function bindSockets() {
     socket.on('request player details', getPlayerDetails);
     socket.on('state updated', onStateUpdated);
     socket.on('scores updated', onScoresUpdated);
+    socket.on('player disconnected', onPlayerDisconnected);
 }
 
 function bindDom() {

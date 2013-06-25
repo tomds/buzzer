@@ -122,11 +122,23 @@ function bindChangeScore(socket) {
     });
 }
 
+function bindKickPlayer(socket) {
+    socket.on('host kick player', function (uuid) {
+        verifyHost(socket, function () {
+            console.log('face');
+            quiz.removePlayer(uuid, function () {
+                socket.emit('player disconnected', {uuid: uuid});
+                socket.broadcast.emit('player disconnected', {uuid: uuid});
+            });
+        });
+    });
+}
+
 function bindDisconnect(socket) {
     socket.on('disconnect', function () {
         socket.get('playerDetails', function (err, details) {
             if (details) {
-                quiz.removePlayer(details, function () {
+                quiz.removePlayer(details.uuid, function () {
                     socket.broadcast.emit('player disconnected', {uuid: details.uuid});
                 });
             }
@@ -142,6 +154,7 @@ exports.init = function (socket) {
     bindBuzz(socket);
     bindChangeScore(socket);
     bindDisconnect(socket);
+    bindKickPlayer(socket);
 
     requestPlayerDetails(socket);
     sendScores(socket);
