@@ -5,7 +5,7 @@
  - DONE Lock down admin
  - DONE Players: edit name/team
  - DONE Kick players with no active connection
- - Make prettier (and fit nicely on all devices)
+ - DONE Make prettier (and fit nicely on all devices)
  - DONE Host: view team allocations
  ----------------
  - DONE Host: kick players
