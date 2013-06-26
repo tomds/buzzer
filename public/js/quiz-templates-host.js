@@ -38,9 +38,7 @@ quizTemplates = {
 
     playerBuzzed: Hogan.compile(
         '<div id="player-buzzed">' +
-            '<p>BUZZ!</p>' +
-            '<p>Player: <strong>{{ name }}</strong></p>' +
-            '<p>Team: <strong>{{ team }}</strong></p>' +
+            '<p>BUZZED: <strong class="{{ team }}">{{ name }}</strong></p>' +
             '<div id="btn-reset-buzzers" class="btn">Reset</div>' +
         '</div>'
     ),
