@@ -1,9 +1,9 @@
 var socket = io.connect();
 var sounds = {
-    red: new Howl({urls: ['audio/buzzer_red.mp3']}),
-    blue: new Howl({urls: ['audio/buzzer_blue.mp3']}),
-    green: new Howl({urls: ['audio/buzzer_green.mp3']}),
-    yellow: new Howl({urls: ['audio/buzzer_yellow.mp3']})
+    red: new Howl({urls: ['audio/buzzer_red.mp3', 'audio/buzzer_red.ogg']}),
+    blue: new Howl({urls: ['audio/buzzer_blue.mp3', 'audio/buzzer_blue.ogg']}),
+    green: new Howl({urls: ['audio/buzzer_green.mp3', 'audio/buzzer_green.ogg']}),
+    yellow: new Howl({urls: ['audio/buzzer_yellow.mp3', 'audio/buzzer_yellow.ogg']})
 };
 
 function getFullTeamsUpdate() {

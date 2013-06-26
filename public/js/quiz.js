@@ -38,7 +38,7 @@ function showWelcomeMessage() {
 function setBuzzerSound(playerDetails) {
     var team = playerDetails.team;
     buzzerSound = new Howl({
-        urls: ['audio/buzzer_' + team + '.mp3']
+        urls: ['audio/buzzer_' + team + '.mp3', 'audio/buzzer_' + team + '.ogg']
     });
 }
 
