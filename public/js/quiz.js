@@ -74,7 +74,7 @@ function getButtonClass(team) {
             newClass = 'btn-danger';
             break;
         case 'blue':
-            newClass = 'btn-primary';
+            newClass = 'btn-info';
             break;
         case 'green':
             newClass = 'btn-success';
@@ -90,14 +90,17 @@ function getButtonClass(team) {
 function showGame() {
     var player = store.get('player');
     if (player) {
-        var buttonClass = getButtonClass(player.team);
-        $('#quiz-container').html(quizTemplates.buzzerActive.render({buttonClass: buttonClass}));
+        $('#quiz-container').html(quizTemplates.buzzerActive.render());
     }
 }
 
 function buzzersActive() {
     showGame();
     $('#buzz-outcome').remove();
+
+    var player = store.get('player');
+    var buttonClass = getButtonClass(player.team);
+    $('#btn-buzzer').removeClass('disabled').addClass(buttonClass);
 }
 
 function onSubmitPlayerDetails(e) {
