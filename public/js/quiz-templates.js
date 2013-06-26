@@ -7,7 +7,7 @@ quizTemplates = {
     ),
 
     buzzerActive: Hogan.compile(
-        '<div id="buzzer-active"><div id="btn-buzzer" class="btn {{ buttonClass }}">BUZZ!</div></div>'
+        '<div id="buzzer-active"><div id="btn-buzzer" class="btn btn-large btn-block {{ buttonClass }}">BUZZ!</div></div>'
     ),
 
     buzzSuccess: Hogan.compile(

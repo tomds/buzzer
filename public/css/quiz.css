@@ -16,6 +16,10 @@ body {
   margin: 30px 0;
 }
 
+#buzzer-active {
+  text-align: center;
+}
+
 .red {
   color: red;
 }
@@ -76,7 +80,7 @@ input {
 }
 
 .host .score {
-  margin-bottom: 100px;
+  margin-bottom: 120px;
 }
 
 .score.red {
@@ -103,10 +107,22 @@ input {
   color: #c8c8c8;
 }
 
+.host-score-edit .btn {
+  padding: 8px 15px;
+}
+
 #player-details {
   clear: both;
 }
 
 .you {
   font-weight: bold;
+}
+
+#player-details {
+  margin-bottom: 25px;
+}
+
+.kick-player, #btn-reset-buzzers {
+  margin-bottom: 10px;
 }
