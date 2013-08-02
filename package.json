@@ -14,7 +14,8 @@
     "underscore": "~1.4.4",
     "cryptojs": "~2.5.3",
     "randomstring": "~1.0.2",
-    "q": "~0.9.6"
+    "q": "~0.9.6",
+    "nconf": "~0.6.7"
   },
   "engines": {
     "node": "0.8"

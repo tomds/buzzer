@@ -4,10 +4,19 @@ var _ = require('underscore');
 var Crypto = require('cryptojs').Crypto;
 var randomstring = require('randomstring');
 var Q = require('q');
+var config = require('./getConfig');
 
+// Check we have a secret host passphrase set, and kill server if not
+config.get('hostSecret')
+.done(function (hostSecret) {
+    if (hostSecret === undefined) {
+        throw 'ERROR: No secret host passphrase found in config. Please set a' +
+        ' passphrase either in config.json or environment variables. See' +
+        ' README.md for more details.'
+    }
+});
 
 var quiz = new gameState.Quiz();
-var secret = 'kIdNnQ<2Yic4x)BG(=TfAf%xXXHcZ#';
 
 function verifyHost(socket) {
     return Q.ninvoke(socket, 'get', 'hostAuthenticated')
@@ -15,17 +24,20 @@ function verifyHost(socket) {
         var authResult = false;
 
         if (!authenticated) {
-            var token = randomstring.generate(30);
-            var hashed = Crypto.HMAC(Crypto.SHA256, token, secret);
+            authResult = config.get('hostSecret')
+            .then(function (hostSecret) {
+                var token = randomstring.generate(30);
+                var hashed = Crypto.HMAC(Crypto.SHA256, token, hostSecret);
 
-            authResult = Q.ninvoke(socket, 'emit', 'host auth challenge', token)
-            .then(function (response) {
-                if (response === hashed) {
-                    socket.set('hostAuthenticated', 'true');
-                    return true;
-                } else {
-                    return false;
-                }
+                return Q.ninvoke(socket, 'emit', 'host auth challenge', token)
+                .then(function (response) {
+                    if (response === hashed) {
+                        socket.set('hostAuthenticated', 'true');
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
             });
         } else {
             authResult = true;
