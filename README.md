@@ -34,14 +34,14 @@ Start up the server:
 
 By default the server listens on port 3000. You can change this by setting the `PORT` environment variable.
 
- * Contestant URL: **http://your.server:3000** (smartphone recommended)
- * Host URL: **http://your.server:3000/host** (iPad/Android tablet recommended)
+ * Contestant URL: http://your.server:3000 (smartphone recommended)
+ * Host URL: http://your.server:3000/host (iPad/Android tablet recommended)
 
 When you load the host URL, you will be asked for a passphrase. Enter the one you put in your config (see above).
 
-**Quiz host: ** Once you're ready to start the quiz, tap the "Start game" button and then ask your first question. When a buzzer is pressed, you will see the name and team of the person who buzzed first, and can ask them for their answer, then add/subtract points as appropriate. Contestants' buzzers will only then be reactivated once you tap the "Reset" button.
+**Quiz host:** Once you're ready to start the quiz, tap the "Start game" button and then ask your first question. When a buzzer is pressed, you will see the name and team of the person who buzzed first, and can ask them for their answer, then add/subtract points as appropriate. Contestants' buzzers will only then be reactivated once you tap the "Reset" button.
 
-**Note: ** When a player buzzes, the host's phone/tablet will try to play the sound of the team who buzzed, but it probably won't work until you've pressed the "Init sounds" button at least once. This hack is needed because by default, most mobile devices won't play a sound unless it's a direct result of a user interaction. Obviously you might not want your host device to play the sounds, in which case ignore this bit :)
+**Note:** When a player buzzes, the host's phone/tablet will try to play the sound of the team who buzzed, but it probably won't work until you've pressed the "Init sounds" button at least once. This hack is needed because by default, most mobile devices won't play a sound unless it's a direct result of a user interaction. Obviously you might not want your host device to play the sounds, in which case ignore this bit :)
 
 Browser support
 ---------------
