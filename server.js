@@ -4,10 +4,12 @@ var http = require('http');
 var io = require('socket.io');
 var clientConnection = require('./clientConnection');
 
+var port = process.env.PORT || 3000;
+
 var app = express();
 var server = http.createServer(app);
 io = io.listen(server);
-server.listen(3000);
+server.listen(port);
 
 app.engine('html', engines.hogan);
 app.set('view engine', 'html');

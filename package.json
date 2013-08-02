@@ -1,7 +1,8 @@
 {
-  "name": "quiz",
-  "description": "HTML quiz show with buzzers. Fastest finger wins!",
-  "version": "0.0.1",
+  "name": "buzzer",
+  "description": "Webapp for hosting a quiz with up to 4 teams. Contestants use their phones as buzzers for answering questions.",
+  "author": "Tom de Simone (https://github.com/tomds/)",
+  "version": "1.0.0",
   "private": "true",
   "dependencies": {
     "socket.io": "~0.9.16",
@@ -17,5 +18,9 @@
   },
   "engines": {
     "node": "0.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomds/buzzer.git"
   }
 }
