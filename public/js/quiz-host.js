@@ -107,7 +107,7 @@ function onHostAuthChallenge(token, fn) {
     var secret = store.get('secret');
     if (secret) {
         var hexdigest = CryptoJS.HmacSHA256(token, secret).toString();
-        fn(hexdigest);
+        fn(null, hexdigest);
     }
 }
 

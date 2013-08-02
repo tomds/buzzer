@@ -3,25 +3,35 @@ var UUID = require('uuid-js');
 var _ = require('underscore');
 var Crypto = require('cryptojs').Crypto;
 var randomstring = require('randomstring');
+var Q = require('q');
 
 
 var quiz = new gameState.Quiz();
 var secret = 'kIdNnQ<2Yic4x)BG(=TfAf%xXXHcZ#';
 
-function verifyHost(socket, callback) {
-    socket.get('hostAuthenticated', function (err, authenticated) {
-        if (authenticated) {
-            callback();
-        } else {
+function verifyHost(socket) {
+    return Q.ninvoke(socket, 'get', 'hostAuthenticated')
+    .then(function (authenticated) {
+        var authResult = false;
+
+        if (!authenticated) {
             var token = randomstring.generate(30);
             var hashed = Crypto.HMAC(Crypto.SHA256, token, secret);
-            socket.emit('host auth challenge', token, function (response) {
+
+            authResult = Q.ninvoke(socket, 'emit', 'host auth challenge', token)
+            .then(function (response) {
                 if (response === hashed) {
                     socket.set('hostAuthenticated', 'true');
-                    callback();
+                    return true;
+                } else {
+                    return false;
                 }
             });
+        } else {
+            authResult = true;
         }
+
+        return authResult;
     });
 }
 
@@ -30,7 +40,8 @@ function bindPlayerDetailsReceived(socket) {
     // else save the new player to the db and associate it with this connection
     socket.on('player details', function (data, fn) {
         if (data.uuid) { // But data from a previous session
-            quiz.modifyPlayer(data, function (err, result) {
+            quiz.modifyPlayer(data)
+            .then(function (result) {
                 if (result.success) {
                     fn({success: true, playerDetails: data});
                     socket.set('playerDetails', data);
@@ -40,11 +51,13 @@ function bindPlayerDetailsReceived(socket) {
                 } else {
                     fn({success: false, errors: result.errors});
                 }
-            });
+            })
+            .done();
         } else { // Has never played before
             var uuid = UUID.create().toString();
             _.extend(data, {uuid: uuid});
-            quiz.addPlayer(data, function (err, result) {
+            quiz.addPlayer(data)
+            .then(function (result) {
                 if (result.success) {
                     fn({success: true, playerDetails: data});
                     socket.set('playerDetails', data);
@@ -54,26 +67,33 @@ function bindPlayerDetailsReceived(socket) {
                 } else {
                     fn({success: false, errors: result.errors});
                 }
-            });
+            })
+            .done();
         }
     });
 }
 
 function bindRequestTeamList(socket) {
     socket.on('request team list', function (fn) {
-        quiz.getAllPlayers(function (players) {
+        quiz.getAllPlayers()
+        .then(function (players) {
             fn({players: players});
-        });
+        })
+        .done();
     });
 }
 
 function bindUpdateState(socket) {
     socket.on('host update state', function (data) {
-        verifyHost(socket, function () {
-            quiz.updateState(data.state);
-            socket.emit('state updated', data);
-            socket.broadcast.emit('state updated', data);
-        });
+        verifyHost(socket)
+        .then(function (authenticated) {
+            if (authenticated) {
+                quiz.updateState(data.state);
+                socket.emit('state updated', data);
+                socket.broadcast.emit('state updated', data);
+            }
+        })
+        .done();
     });
 }
 
@@ -82,7 +102,8 @@ function requestPlayerDetails(socket) {
 }
 
 function sendScores(socket) {
-    quiz.getScores(function (err, scores) {
+    quiz.getScores()
+    .then(function (scores) {
         socket.emit('scores updated', scores);
     });
 }
@@ -100,9 +121,11 @@ function bindBuzz(socket) {
             socket.broadcast.emit('state updated', {state: 'buzzersInactive'});
             socket.emit('state updated', {state: 'buzzersInactive'});
 
-            socket.get('playerDetails', function (err, data) {
+            Q.ninvoke(socket, 'get', 'playerDetails')
+            .then(function (data) {
                 socket.broadcast.emit('player buzzed', data);
-            });
+            })
+            .done();
 
             fn({success: true});
         } else {
@@ -113,37 +136,50 @@ function bindBuzz(socket) {
 
 function bindChangeScore(socket) {
     socket.on('host change score', function (data) {
-        verifyHost(socket, function () {
-            quiz.changeScore(data, function (error, scores) {
-                if (!error) {
+        verifyHost(socket)
+        .then(function (authenticated) {
+            if (authenticated) {
+                return quiz.changeScore(data)
+                .then(function (scores) {
                     socket.emit('scores updated', scores);
                     socket.broadcast.emit('scores updated', scores);
-                }
-            });
+                })
+                .done();
+            }
         });
     });
 }
 
 function bindKickPlayer(socket) {
     socket.on('host kick player', function (uuid) {
-        verifyHost(socket, function () {
-            quiz.removePlayer(uuid, function () {
-                socket.emit('player disconnected', {uuid: uuid, kicked: true});
-                socket.broadcast.emit('player disconnected', {uuid: uuid, kicked: true});
-            });
-        });
+        verifyHost(socket)
+        .then(function (authenticated) {
+            if (authenticated) {
+                quiz.removePlayer(uuid)
+                .then(function () {
+                    socket.emit('player disconnected', {uuid: uuid, kicked: true});
+                    socket.broadcast.emit('player disconnected', {uuid: uuid, kicked: true});
+                })
+                .done();
+            }
+        })
+        .done();
     });
 }
 
 function bindDisconnect(socket) {
     socket.on('disconnect', function () {
-        socket.get('playerDetails', function (err, details) {
+        Q.ninvoke(socket, 'get', 'playerDetails')
+        .then(function (details) {
             if (details) {
-                quiz.removePlayer(details.uuid, function () {
+                quiz.removePlayer(details.uuid)
+                .then(function () {
                     socket.broadcast.emit('player disconnected', {uuid: details.uuid});
-                });
+                })
+                .done();
             }
-        });
+        })
+        .done();
     });
 }
 

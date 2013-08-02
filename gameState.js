@@ -1,3 +1,5 @@
+var Q = require('q');
+
 var db = require('mongojs').connect('quiz', ['scores', 'players']);
 
 function Quiz () {
@@ -9,7 +11,8 @@ Quiz.prototype = {
 
     startQuiz: function() {
         // Continue previous quiz, or start new one if none found
-        db.scores.findOne({}, function (err, scores) {
+        Q.ninvoke(db.scores, 'findOne', {})
+        .done(function (scores) {
             if (!scores) {
                 var scores = {
                     red: 0,
@@ -23,31 +26,35 @@ Quiz.prototype = {
         });
     },
 
-    addPlayer: function (details, callback) {
-        this.validatePlayer(details, function (err, result) {
+    addPlayer: function (details) {
+        return Q.invoke(this, 'validatePlayer', details)
+        .then(function (result) {
             if (result.success) {
-                db.players.insert(details, function () {
-                    callback(null, result);
+                return Q.ninvoke(db.players,'insert', details)
+                .then(function () {
+                    return result;
                 });
             } else {
-                callback(null, result);
+                return result;
             }
         });        
     },
 
-    modifyPlayer: function (details, callback) {
-        this.validatePlayer(details, function (err, result) {
+    modifyPlayer: function (details) {
+        return Q.invoke(this, 'validatePlayer', details)
+        .then(function (result) {
             if (result.success) {
-                db.players.update({uuid: details.uuid}, {$set: {name: details.name, team: details.team}}, {upsert: true}, function () {
-                    callback(null, result);
+                return Q.ninvoke(db.players, 'update', {uuid: details.uuid}, {$set: {name: details.name, team: details.team}}, {upsert: true})
+                .then(function () {
+                    return result;
                 });
             } else {
-                callback(null, result);
+                return result;
             }
         });
     },
 
-    validatePlayer: function (details, callback) {
+    validatePlayer: function (details) {
         var errors = {
             name: [],
             team: []
@@ -65,30 +72,27 @@ Quiz.prototype = {
             success = false;
         }
 
-        db.players.find({
+        return Q.ninvoke(db.players, 'find', {
             team: details.team,
             name: details.name,
             uuid: {$ne: details.uuid}
-        }, function (err, players) {
+        })
+        .then(function (players) {
             if (players.length) {
                 success = false;
                 errors.name.push('Someone on your team already has that name - please choose another');
             }
 
-            callback (null, {success: success, errors: errors});
+            return {success: success, errors: errors};
         });
     },
 
-    removePlayer: function (uuid, callback) {
-        db.players.remove({uuid: uuid}, function () {
-            callback();
-        });
+    removePlayer: function (uuid) {
+        return Q.ninvoke(db.players, 'remove', {uuid: uuid});
     },
 
-    getAllPlayers: function (callback) {
-        db.players.find({}, function (err, players) {
-            callback(players);
-        });
+    getAllPlayers: function () {
+        return Q.ninvoke(db.players, 'find', {});
     },
 
     updateState: function (state) {
@@ -100,13 +104,11 @@ Quiz.prototype = {
         return this.gameState;
     },
 
-    getScores: function (callback) {
-        db.scores.findOne({}, function (err, scores) {
-            callback(null, scores);
-        });
+    getScores: function () {
+        return Q.ninvoke(db.scores, 'findOne', {});
     },
 
-    changeScore: function (data, callback) {
+    changeScore: function (data) {
         var incDec = data.direction === 'up' ? 1 : -1;
         var team = data.team
         var self = this;
@@ -115,11 +117,8 @@ Quiz.prototype = {
         updateSubObject[team] = incDec;
         var updateObject = {$inc: updateSubObject};
 
-        db.scores.update({}, updateObject, function (err) {
-            self.getScores(function (err, scores) {
-                callback(null, scores);
-            });
-        });
+        return Q.ninvoke(db.scores, 'update', {}, updateObject)
+        .then(self.getScores);
     }
 };
 
